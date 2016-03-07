@@ -11,6 +11,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
+import com.viewpagerindicator.TabPageIndicator;
+
 import java.util.logging.Logger;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
@@ -22,6 +24,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Button two;
     private Button three;
     private Button four;
+    private static final String[] TITLE = new String[] { "头条", "房产", "另一面", "女人",
+            "财经", "数码", "情感", "科技" };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,10 +41,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void InitView() {
 
-        one = (Button) findViewById(R.id.bt_one);
-        two = (Button) findViewById(R.id.bt_two);
-        three = (Button) findViewById(R.id.bt_three);
-        four = (Button) findViewById(R.id.bt_four);
+        one         = (Button) findViewById(R.id.bt_one);
+        two         = (Button) findViewById(R.id.bt_two);
+        three       = (Button) findViewById(R.id.bt_three);
+        four        = (Button) findViewById(R.id.bt_four);
 
         //设置点击监听
         one.setOnClickListener(this);
@@ -58,6 +63,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //获取ViewPager
         //创建一个FragmentPagerAdapter对象，该对象负责为ViewPager提供多个Fragment
         viewPager = (ViewPager) findViewById(R.id.pager);
+
         FragmentPagerAdapter pagerAdapter = new FragmentPagerAdapter(
                 getSupportFragmentManager()) {
 
@@ -93,6 +99,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return 4;
             }
 
+            @Override
+            public CharSequence getPageTitle(int position) {
+                return TITLE[position];
+                //return super.getPageTitle(position);
+            }
         };
         //为ViewPager组件设置FragmentPagerAdapter
         viewPager.setAdapter(pagerAdapter);
@@ -101,7 +112,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
-                Log.d("tang", "OnPageChangeListener.onPageScrolled");
+                //Log.d("tang", "OnPageChangeListener.onPageScrolled");
             }
 
             @Override
@@ -142,44 +153,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Log.d("tang", "OnPageChangeListener.onPageScrollStateChanged");
             }
         });
-        //为viewpager组件绑定时间监听器
-        /*
-        viewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            //当ViewPager显示的Fragment发生改变时激发该方法
+
+
+        TabPageIndicator indicator = (TabPageIndicator)findViewById(R.id.indicator);
+        indicator.setViewPager(viewPager);
+
+        indicator.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onPageSelected(int position) {
-                switch (position) {
-                    //如果是点击的第一个button，那么就让第一个button的字体变为蓝色
-                    //其他的button的字体的颜色变为黑色
-                    case 0:
-                        one.setTextColor(Color.BLUE);
-                        two.setTextColor(Color.BLACK);
-                        three.setTextColor(Color.BLACK);
-                        four.setTextColor(Color.BLACK);
-                        break;
-                    case 1:
-                        one.setTextColor(Color.BLACK);
-                        two.setTextColor(Color.BLUE);
-                        three.setTextColor(Color.BLACK);
-                        four.setTextColor(Color.BLACK);
-                        break;
-                    case 2:
-                        one.setTextColor(Color.BLACK);
-                        two.setTextColor(Color.BLACK);
-                        three.setTextColor(Color.BLUE);
-                        four.setTextColor(Color.BLACK);
-                        break;
-                    case 3:
-                        one.setTextColor(Color.BLACK);
-                        two.setTextColor(Color.BLACK);
-                        three.setTextColor(Color.BLACK);
-                        four.setTextColor(Color.BLUE);
-                        break;
-                }
-                super.onPageSelected(position);
+            public void onClick(View v) {
+
             }
         });
-        */
+
+        indicator.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
     @Override
